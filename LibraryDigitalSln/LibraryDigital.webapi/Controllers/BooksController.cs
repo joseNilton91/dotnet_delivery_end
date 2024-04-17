@@ -11,19 +11,19 @@ namespace LibraryDigital.webapi.Controllers
     {
         private readonly AppDbContext _context;
 
-        public BooksController(AppDbContext context) 
+        public BooksController(AppDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBook() 
+        public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
             return await _context.Books.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(int id) 
+        public async Task<ActionResult<Book>> GetBook(int id)
         {
             var book = await _context.Books.FindAsync(id);
             if (book == null)
@@ -72,57 +72,57 @@ namespace LibraryDigital.webapi.Controllers
 
         }
 
-            // DELETE: api/Books/5
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteBook(int id)
+        // DELETE: api/Books/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
-                var book = await _context.Books.FindAsync(id);
-                if (book == null)
-                {
-                    return NotFound();
-                }
-
-                _context.Books.Remove(book);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
+                return NotFound();
             }
 
-            // POST: api/Books/{id}/Rate
-            [HttpPost("{id}/Rate")]
-            public async Task<IActionResult> RateBook(int id, int rating)
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // POST: api/Books/{id}/Rate
+        [HttpPost("{id}/Rate")]
+        public async Task<IActionResult> RateBook(int id, int rating)
+        {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
-                var book = await _context.Books.FindAsync(id);
-                if (book == null)
-                {
-                    return NotFound();
-                }
-
-                book.Rating = rating;
-                await _context.SaveChangesAsync();
-
-                return NoContent();
+                return NotFound();
             }
 
-            // POST: api/Books/{id}/Review
-            [HttpPost("{id}/Review")]
-            public async Task<IActionResult> ReviewBook(int id, string review)
+            book.Rating = rating;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // POST: api/Books/{id}/Review
+        [HttpPost("{id}/Review")]
+        public async Task<IActionResult> ReviewBook(int id, string review)
+        {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
-                var book = await _context.Books.FindAsync(id);
-                if (book == null)
-                {
-                    return NotFound();
-                }
-
-                book.Review = review;
-                await _context.SaveChangesAsync();
-
-                return NoContent();
+                return NotFound();
             }
 
-            private bool BookExists(int id)
-            {
-                return _context.Books.Any(e => e.IdBook == id);
-            }
+            book.Review = review;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool BookExists(int id)
+        {
+            return _context.Books.Any(e => e.IdBook == id);
         }
     }
+}

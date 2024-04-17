@@ -1,0 +1,6 @@
+@LibraryDigital.webapi_HostAddress = http://localhost:5105
+
+GET {{LibraryDigital.webapi_HostAddress}}/swagger/index.html/
+Accept: application/json
+
+###
